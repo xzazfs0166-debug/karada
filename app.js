@@ -189,6 +189,14 @@ function renderResult() {
   const max = Math.max(...Object.values(score));
   const mains = max === 0 ? [] : Object.keys(score).filter(t => score[t] === max);
   const sleepTotal = answers.sleep.reduce((a, b) => a + b, 0);
+  const totalScore = Object.values(score).reduce((a, b) => a + b, 0) + sleepTotal;
+  const step = totalScore >= 30 ? 0 : totalScore >= 20 ? 1 : totalScore >= 10 ? 2 : 3;
+  const steps = [
+    { title: 'まずは、消化力を整えるところから', text: '温かく消化しやすい食事と休息で、身体が栄養を受け取るための土台をつくる段階です。' },
+    { title: '必要な栄養を、少しずつ受け取る', text: '食事の量や種類を無理なく整えて、使ったエネルギーを補っていく段階です。' },
+    { title: '栄養とエネルギーを、身体にめぐらせる', text: '軽い運動や入浴、深い呼吸を取り入れて、身体のめぐりを育てる段階です。' },
+    { title: '今の調子を、心地よく育てて保つ', text: '今できている習慣を大切にしながら、自分に合う整え方を続けていく段階です。' }
+  ];
 
   const stateCopy = {
     recharge: {
@@ -292,6 +300,7 @@ function renderResult() {
   };
   $('r-first-care').textContent = firstActions[mainKey];
   $('r-first-reason').textContent = now.reason;
+  $('r-step').innerHTML = `<span>今の整え方の入口は</span><b>STEP ${step}</b><strong>${steps[step].title}</strong><p>${steps[step].text}</p><small>STEPは良い・悪いではなく、今どこから整えるとよいかを表しています。</small><div class="step-overview">${steps.map((s, i) => `<div class="step-row ${i === step ? 'is-current' : ''}"><em>STEP ${i}</em><span>${s.title}</span>${i === step ? '<i>今ここ</i>' : ''}</div>`).join('')}</div>`;
   const stateNames = { recharge: ['補う力', '温かく休む'], flow: ['めぐる力', '軽く動かす'], relax: ['ゆるむ力', '深く休む'] };
   $('r-state-map').innerHTML = Object.keys(score).map(t => {
     const level = score[t] <= 2 ? 'おだやか' : score[t] <= 5 ? '少し気になる' : '今いちばん大切';
@@ -306,7 +315,7 @@ function renderResult() {
   // ⑥ もうひとつのセルフケア
   const main = mains.length ? TYPES[mains[0]] : null;
   $('r-links').innerHTML =
-    linkButton('line', `「診断したよ」とひと言だけでも大丈夫。あなたの結果は「${now.title}」です。まこから順番にお聞きします。初回相談は無料です。`, 'primary') +
+    linkButton('line', `公式LINEで「STEP ${step}・今悩んでいること・どうなりたいか」を教えてね。書けるところだけで大丈夫です。あなたの結果は「${now.title}」。初回相談は無料です。`, 'primary') +
     linkButton('telmee', main ? main.telmee : '温かさに包まれながら、ほっとひと息つく時間を。');
 
   // 今日のひとつ
