@@ -5,8 +5,8 @@
 
 // ---------- リンク先（空欄のボタンは「準備中」と表示） ----------
 const LINKS = {
-  telmee:    { label: '🌿 テルミーについて知る', url: 'https://www.canva.com/design/DAHGP-GtOPs/KsXIl6oJmzJTWlI7v1FAqA/view?utm_content=DAHGP-GtOPs&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h974f7672e7' },
-  line:      { label: '💌 まこに初回無料で相談する', url: 'https://lin.ee/XWCoZGy' }
+  telmee:    { label: '🌿 テルミーについて知る', url: 'https://www.canva.com/design/DAHGP-GtOPs/KsXIl6oJmzJTWlI7v1FAqA/view' },
+  line:      { label: '💌 公式LINEから無料で相談する', url: 'https://lin.ee/XWCoZGy' }
 };
 
 // ---------- 回答のしかた ----------
@@ -28,8 +28,8 @@ const BODY_QS = [
   { text: '身体が重だるい', type: 'flow' },
   { text: 'むくみが気になる', type: 'flow' },
   { text: '運動不足を感じている', type: 'flow' },
-  { text: '寝つくまでに時間がかかる', type: 'relax' },
-  { text: '夜中に目が覚める', type: 'relax' },
+  { text: '呼吸が浅いと感じることがある', type: 'relax' },
+  { text: '休んでいても、頭の中で考えごとが続く', type: 'relax' },
   { text: '日常的にストレスを感じている', type: 'relax' },
   { text: 'イライラしやすい', type: 'relax' },
   { text: '自分のための時間が少ない', type: 'relax' }
@@ -291,7 +291,7 @@ function renderResult() {
   // 求めていることと重なるものを上に
   const hit = c => c.wish.filter(w => wishes.has(w)).length;
   const cares = careAll.filter((c, i) => careAll.findIndex(x => x.text === c.text) === i)
-    .map((c, i) => ({ ...c, i })).sort((a, b) => hit(b) - hit(a) || a.i - b.i).slice(0, 6);
+    .map((c, i) => ({ ...c, i })).sort((a, b) => hit(b) - hit(a) || a.i - b.i).slice(0, 2);
   const firstActions = {
     recharge: '温かい汁ものを、ひと口からゆっくり味わう',
     flow: '肩と首をゆっくり回して、10分だけ歩いてみる',
@@ -308,7 +308,7 @@ function renderResult() {
     return `<div class="state-row ${t === mainKey ? 'is-main' : ''}"><div><b>${stateNames[t][0]}</b><small>${stateNames[t][1]}</small></div><span class="state-track"><i style="width:${width}%;background:${TYPES[t].color}"></i></span><em>${level}</em></div>`;
   }).join('');
   $('r-balance-picture').innerHTML = `<span class="balance-dot ${mainKey}"></span><span class="balance-axis axis-r">補う</span><span class="balance-axis axis-f">めぐる</span><span class="balance-axis axis-l">ゆるむ</span><small>今のあなた</small>`;
-  $('r-care').innerHTML = cares.map(c =>
+  if ($('r-care')) $('r-care').innerHTML = cares.map(c =>
     `<li><span class="cat">${c.cat}</span>${c.text}${hit(c) ? '<span class="match">あなたの願いに近い</span>' : ''}</li>`
   ).join('');
 
@@ -319,14 +319,16 @@ function renderResult() {
     linkButton('telmee', main ? main.telmee : '温かさに包まれながら、ほっとひと息つく時間を。');
 
   // 今日のひとつ
-  const picks = cares.slice(0, 3).map(c => c.text).concat(['まこに相談してみる']);
-  $('r-pick').innerHTML = picks.map((p, i) => `<button type="button" class="pick" data-i="${i}">${p}</button>`).join('');
-  $('r-pick-done').hidden = true;
-  $('r-pick').querySelectorAll('.pick').forEach(b => b.addEventListener('click', () => {
-    $('r-pick').querySelectorAll('.pick').forEach(x => x.setAttribute('aria-pressed', x === b));
-    $('r-pick-text').textContent = b.textContent;
-    $('r-pick-done').hidden = false;
-  }));
+  const picks = [firstActions[mainKey], ...cares.map(c => c.text)].filter((p, i, a) => a.indexOf(p) === i).slice(0, 3);
+  if ($('r-pick')) {
+    $('r-pick').innerHTML = picks.map((p, i) => `<button type="button" class="pick" data-i="${i}">${p}</button>`).join('');
+    $('r-pick-done').hidden = true;
+    $('r-pick').querySelectorAll('.pick').forEach(b => b.addEventListener('click', () => {
+      $('r-pick').querySelectorAll('.pick').forEach(x => x.setAttribute('aria-pressed', x === b));
+      $('r-pick-text').textContent = b.textContent;
+      $('r-pick-done').hidden = false;
+    }));
+  }
 
   show('screen-result');
 }
