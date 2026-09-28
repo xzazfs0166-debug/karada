@@ -1,0 +1,164 @@
+/* 生成り × セージグリーン。見出しは明朝、本文は丸ゴシック */
+:root {
+  --bg: #eef0e5;          /* 生成りがかったセージ */
+  --card: #fbfaf4;
+  --ink: #33413a;
+  --muted: #7d8a80;
+  --line: #dde3d3;
+  --main: #4f7d5f;        /* 深い若葉（ボタン） */
+  --main-soft: #e2eadb;
+  --recharge: #7faac4;    /* 淡い水色 */
+  --recharge-soft: #e4eff3;
+  --flow: #d9955f;        /* アプリコット */
+  --flow-soft: #f7e9dc;
+  --relax: #c08a95;       /* くすみピンク */
+  --relax-soft: #f3e6e8;
+  --mincho: 'Shippori Mincho', 'Hiragino Mincho ProN', 'Yu Mincho', serif;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: 'Zen Maru Gothic', 'Hiragino Maru Gothic ProN', sans-serif;
+  line-height: 1.9; font-size: 16px;
+}
+main { max-width: 520px; margin: 0 auto; padding: 32px 16px 48px; }
+h1 { font-family: var(--mincho); font-weight: 500; font-size: 34px; line-height: 1.45; margin: 4px 0 8px; letter-spacing: .08em; }
+h2 { font-family: var(--mincho); font-weight: 500; font-size: 24px; line-height: 1.5; margin: 4px 0 8px; }
+h3 { font-family: var(--mincho); font-weight: 700; font-size: 18px; line-height: 1.6; margin: 0 0 12px; }
+h4 { font-size: 14px; margin: 18px 0 4px; color: var(--accent, var(--main)); letter-spacing: .05em; }
+p { margin: 0 0 12px; }
+.center { text-align: center; }
+.lead { font-size: 17px; margin: 0; }
+.muted { color: var(--muted); font-size: 14px; }
+.eyebrow { color: var(--accent, var(--main)); font-size: 13px; letter-spacing: .15em; margin: 0 0 8px; }
+.note { color: var(--muted); font-size: 12px; margin-top: 20px; }
+
+.hero { text-align: center; padding: 16px 0 28px; }
+.leaf { width: 72px; height: 72px; color: var(--main); }
+
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 22px 20px; margin: 0 0 18px; }
+.card.soft { background: var(--main-soft); border: none; }
+.flow-list { margin: 0 0 12px; padding-left: 1.4em; }
+
+.btn {
+  display: block; width: 100%; padding: 15px; margin: 12px 0 0;
+  border: none; border-radius: 999px; background: var(--main); color: #fff;
+  font: inherit; font-weight: 700; font-size: 17px; cursor: pointer;
+}
+.btn.ghost { background: transparent; color: var(--main); border: 1.5px solid var(--main); }
+.btn:disabled { background: var(--line); color: var(--muted); cursor: default; }
+.nav { display: flex; gap: 12px; position: sticky; bottom: 0; padding: 8px 0 12px; background: linear-gradient(transparent, var(--bg) 30%); }
+.nav .btn { flex: 1; }
+
+.progress { position: fixed; top: 0; left: 0; right: 0; height: 4px; background: var(--line); z-index: 5; }
+.progress i { display: block; height: 100%; width: 0; background: var(--main); transition: width .3s; }
+.step-count { color: var(--main); font-size: 13px; margin: 0; }
+
+/* 3択の質問 */
+.q-list { list-style: none; padding: 0; margin: 16px 0 8px; }
+.q { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 14px 14px 12px; margin-bottom: 12px; }
+.q-text { margin: 0 0 10px; font-weight: 500; }
+.q-no { display: inline-block; min-width: 1.6em; color: var(--muted); font-size: 13px; }
+.scale { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.scale button {
+  font: inherit; font-size: 13px; padding: 9px 2px; border-radius: 12px; cursor: pointer;
+  border: 1.5px solid var(--line); background: #fff; color: var(--ink);
+}
+.scale button[aria-checked="true"] { background: var(--main); border-color: var(--main); color: #fff; font-weight: 700; }
+
+/* 複数選択 */
+.wish-list { list-style: none; padding: 0; margin: 16px 0 8px; }
+.check { display: flex; gap: 12px; align-items: center; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; margin-bottom: 10px; cursor: pointer; }
+.check input { position: absolute; opacity: 0; }
+.check .box { flex: none; width: 22px; height: 22px; border: 2px solid var(--line); border-radius: 7px; }
+.check input:checked + .box { background: var(--main); border-color: var(--main); box-shadow: inset 0 0 0 3px #fff; }
+.check:has(input:checked) { border-color: var(--main); }
+.check input:focus-visible + .box { outline: 2px solid var(--main); outline-offset: 2px; }
+
+/* 結果 */
+.type-head { background: var(--accent-soft); border-radius: 24px; padding: 26px 20px 20px; margin-bottom: 18px; text-align: center; }
+.type-head h2 { color: var(--accent); font-size: 26px; margin: 0; }
+.type-label { font-size: 13px; color: var(--muted); margin: 0; }
+#r-bars { margin-top: 16px; text-align: left; }
+.bar-row { display: flex; align-items: center; gap: 10px; font-size: 13px; margin-bottom: 6px; }
+.bar-name { width: 5.5em; flex: none; color: var(--muted); }
+.bar { flex: 1; height: 8px; background: rgba(255,255,255,.8); border-radius: 99px; overflow: hidden; }
+.bar i { display: block; height: 100%; border-radius: 99px; }
+.chip { display: inline-block; background: var(--relax-soft); border-radius: 99px; padding: 2px 12px; margin: 0 6px 6px 0; font-size: 14px; }
+.type-card { border-top: 5px solid var(--accent); }
+.type-card .eyebrow { font-weight: 700; }
+.message { background: var(--accent-soft, var(--main-soft)); border-radius: 14px; padding: 14px 16px; }
+.card.message { border: none; }
+.foods { font-weight: 500; }
+.care-list { list-style: none; padding: 0; margin: 0; }
+.care-list li { padding: 10px 0; border-bottom: 1px dashed var(--line); }
+.care-list li:last-child { border: none; }
+.cat { display: inline-block; font-size: 12px; background: var(--main-soft); color: var(--main); border-radius: 6px; padding: 0 8px; margin-right: 8px; }
+.match { display: block; font-size: 12px; color: var(--relax); margin-top: 2px; }
+
+.link-btn { display: block; background: var(--card); border-radius: 16px; padding: 14px 16px; margin-top: 10px; color: var(--ink); text-decoration: none; border: 1.5px solid transparent; }
+.link-btn:not(.off):hover { border-color: var(--main); }
+.link-btn b { display: block; }
+.link-btn small { display: block; font-size: 13px; color: var(--muted); margin-top: 2px; }
+.link-btn.off { opacity: .75; }
+.link-btn .soon { color: var(--relax); }
+
+.pick-list { display: grid; gap: 8px; }
+.pick { font: inherit; font-size: 15px; text-align: left; padding: 12px 16px; border-radius: 14px; border: 1.5px solid var(--line); background: #fff; color: var(--ink); cursor: pointer; }
+.pick[aria-pressed="true"] { border-color: var(--main); background: var(--main-soft); font-weight: 700; }
+.pick-done { margin: 14px 0 0; text-align: center; }
+
+/* ---- アプリ風の見た目（参考: 生成り×グリーンの養生アプリ） ---- */
+.kicker { font-size: 12px; color: var(--muted); letter-spacing: .12em; margin: 0; }
+.sub { color: var(--muted); font-size: 14px; letter-spacing: .05em; margin-bottom: 22px; }
+.card { border-radius: 24px; box-shadow: 0 6px 20px rgba(60, 80, 60, .06); border-color: #e8ebdf; }
+.day-card { position: relative; background: var(--card); border-radius: 28px; padding: 18px 18px 14px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(60, 80, 60, .10); overflow: hidden; }
+.day-top { display: flex; justify-content: space-between; align-items: flex-start; font-size: 12px; color: var(--muted); }
+.date { text-align: right; line-height: 1.2; }
+.date b { display: block; font-family: var(--mincho); font-weight: 500; font-size: 38px; color: var(--ink); }
+.date small { font-size: 11px; }
+.art svg { display: block; width: 100%; height: 100%; }
+.day-card .art { height: 220px; margin: 4px -18px 0; }
+.vertical { position: absolute; right: 22px; top: 96px; writing-mode: vertical-rl; font-family: var(--mincho); font-size: 17px; letter-spacing: .3em; line-height: 1.8; color: var(--ink);
+  background: rgba(251, 250, 244, .8); padding: 10px 4px; border-radius: 8px; border: 1px solid #b85b4f55; }
+.day-foot { text-align: center; font-family: var(--mincho); font-size: 14px; color: var(--muted); margin: 8px 0 0; }
+.caption { font-size: 12px; color: var(--muted); border-left: 3px solid #b85b4f; padding-left: 10px; margin: 20px 0 0; }
+.btn { box-shadow: 0 6px 16px rgba(79, 125, 95, .25); letter-spacing: .1em; }
+.btn.ghost { box-shadow: none; }
+.type-head { position: relative; overflow: hidden; background: var(--card); box-shadow: 0 10px 30px rgba(60, 80, 60, .10); padding-top: 0; }
+.type-head .art.thin { height: 80px; margin: 0 -20px 6px; }
+.type-head h2 { font-size: 28px; }
+.q { border-radius: 20px; }
+.scale button { border-radius: 14px; }
+.scale button[aria-checked="true"] { box-shadow: 0 4px 10px rgba(79, 125, 95, .25); }
+.link-btn { box-shadow: 0 4px 12px rgba(60, 80, 60, .06); }
+.type-head .bar { background: var(--main-soft); }
+
+/* 添付イメージに合わせた、紙と水彩の養生ノート */
+:root{--bg:#edf0e5;--card:#fffef8;--ink:#424d3e;--muted:#697261;--line:#d8ddce;--main:#596e50;--main-soft:#e4ead9;--recharge:#6c8d94;--recharge-soft:#e7efed;--flow:#b38155;--flow-soft:#f4ebdc;--relax:#aa7a7d;--relax-soft:#f3e7e5}
+body{background:var(--bg);font-size:16px;letter-spacing:.025em;background-image:radial-gradient(#65744909 .7px,transparent .7px);background-size:5px 5px}
+[hidden]{display:none!important}
+.app-header{max-width:980px;margin:auto;padding:25px 28px 20px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #cbd2bd}
+.brand-mark{width:42px;height:46px;display:grid;place-items:center;background:#dce3cf;border-radius:18px 18px 8px 18px;color:var(--main)}.brand-mark svg{width:27px;height:27px;overflow:visible}.brand-mark path:first-child{fill:#f7f8f1;stroke:currentColor;stroke-width:1.7;stroke-linejoin:round}.brand-mark path:last-child{fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round}
+.brand-name{font-family:var(--mincho);font-size:18px;line-height:1.5;letter-spacing:.1em}.brand-name small{display:block;font:11px 'Zen Maru Gothic',sans-serif;color:var(--muted);letter-spacing:.12em;margin-top:4px}
+.header-label{margin-left:auto;font-size:12px;border:1px solid #bdc7ae;border-radius:6px;padding:3px 9px;color:var(--main);white-space:nowrap}
+main{max-width:980px;padding:32px 28px 20px}.screen:not(#screen-top){max-width:610px;margin:auto}.welcome-heading{text-align:center;margin-bottom:26px}.kicker{font-size:13px;color:var(--main);letter-spacing:.15em;margin-bottom:10px}
+h1{font-size:34px;line-height:1.6;letter-spacing:.12em;margin:0 0 10px}h2{line-height:1.65;letter-spacing:.06em}.sub{margin-bottom:0;font-size:14px}
+.welcome-grid{display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:center}.day-card{margin:0;background:#faf9f3;border:1px solid #d7ddcb;border-radius:18px;padding:18px 18px 14px;box-shadow:0 5px 0 #dbe1d1,0 10px 22px #46523908}
+.day-top{position:relative;z-index:1;align-items:center;font-size:13px}.day-top>span:first-child{border-left:2px solid #b58a6e;padding-left:9px}.date{display:flex;align-items:center;gap:9px}.date b{font-size:31px}.date small{font-size:12px;max-width:50px;line-height:1.7}
+.wellness-art{display:block;width:calc(100% + 36px);height:auto;object-fit:contain;margin:0 -18px}.day-foot{font-size:14px;border-top:1px solid #e4e4d6;padding-top:12px;margin:0;color:var(--ink)}
+.start-panel .eyebrow{font-size:12px;letter-spacing:.06em}.start-panel h2{font-size:25px;margin:0 0 12px}.intro{font-size:14px;line-height:2;color:var(--muted)}.time-label{font-size:12px;color:var(--muted);margin:19px 0 6px}.time-label span{margin:0 6px;color:#a7b29c}
+.btn{border-radius:11px;padding:14px 16px;font-size:16px;letter-spacing:.05em;box-shadow:0 3px 0 #40583a;transition:background .15s,transform .15s}.btn:hover:not(:disabled){background:#465e3e}.btn:active:not(:disabled){transform:translateY(1px)}.btn span{float:right;font-weight:400}.btn.ghost{border:1px solid #a9b79c;background:#f5f6ed;box-shadow:none}.btn.ghost:hover{background:#e2e8d7}.btn:disabled{box-shadow:none;color:#6b7563;background:#dce2d3}
+.start-note{font-size:12px;color:var(--muted);margin:10px 0 20px;text-align:center}.flow-list{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.flow-list li{border:1px solid #d2dac5;background:#f5f6ed;border-radius:10px;padding:9px 4px;text-align:center;font-size:12px;line-height:1.7}.flow-list li>span{font-family:var(--mincho);font-size:18px;color:#81906e}.flow-list small{display:block;font-size:11px;color:var(--muted);margin-top:3px}.top-note{max-width:740px;margin:30px auto 0;line-height:1.9}.note{color:#687060}.app-footer{max-width:924px;margin:0 auto;padding:18px 20px 24px;border-top:1px solid #d0d8c4;text-align:center;font-size:12px;color:var(--muted)}.app-footer span{margin:0 8px}
+.progress{height:3px;background:transparent}.progress i{background:#839671}.step-count{display:inline-block;font-size:13px;background:#dce5cf;border:1px solid #c2cfb2;padding:2px 14px;border-radius:30px;margin-bottom:12px}.q-list{margin-top:24px}.q{padding:20px 18px;border-radius:13px;margin-bottom:15px;box-shadow:0 3px 0 #dfe4d6;border-color:#d5ddc9}.q-text{display:flex;gap:11px;align-items:baseline;font-size:16px;margin-bottom:15px}.q-no{font-family:var(--mincho);color:#6c8056;font-size:16px}.scale{gap:8px}.scale button{border:1px solid #cdd5c1;background:#fafbf5;font-size:14px;min-height:48px;padding:9px 3px;border-radius:8px}.scale button[aria-checked="true"]{background:#647857;border-color:#647857;box-shadow:none}.scale button:hover{border-color:var(--main)}button:focus-visible,a:focus-visible{outline:3px solid #a4784e;outline-offset:4px}.nav{gap:14px;padding:10px 0 18px}.check{border-radius:12px;padding:17px;background:var(--card)}.check:has(input:checked){background:#e4ead9}.check .box{border-color:#aebc9e}
+.card{border-radius:14px;border:1px solid #d6ddca;box-shadow:0 3px 0 #dfe4d6;padding:22px;margin-bottom:20px}.card.soft{background:#e1e7d6;border:1px solid #cbd5bd}.type-head{border:1px solid #d4dbc8;border-radius:18px;background:#faf9f3;padding:0 24px 24px;box-shadow:0 4px 0 #dbe1d1}.result-art{display:block;width:230px;height:150px;object-fit:cover;margin:4px auto 12px;mix-blend-mode:multiply}.type-label{font-size:14px}.type-head h2{font-size:26px;margin:7px 0 12px}.bar-row{font-size:14px;margin-bottom:10px}.type-card{border-top:4px solid var(--accent)}.link-btn{border:1px solid #d2dbc7;border-radius:10px;box-shadow:none}.pick{border-radius:9px;min-height:48px}.cat{font-size:12px}.care-list li{padding:14px 0}.match{color:#8e5960;font-size:13px}.screen{animation:appear .25s ease-out}@keyframes appear{from{opacity:.65;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.now-card{overflow:hidden;background:#fffef8;border:1px solid #d4dcc7;border-radius:20px;box-shadow:0 5px 0 #dce2d3;margin:0 0 24px}.care-illustration{height:205px;overflow:hidden;background:#f8f6ec}.care-illustration img{display:block;width:300%;max-width:none;height:100%;object-fit:cover;transition:transform .35s ease}.care-illustration[data-type="recharge"] img,.care-illustration[data-type="balanced"] img{transform:translateX(0)}.care-illustration[data-type="flow"] img{transform:translateX(-33.333%)}.care-illustration[data-type="relax"] img{transform:translateX(-66.666%)}.now-copy{padding:22px 24px 17px;text-align:center}.now-copy h2{font-size:27px;color:var(--main);margin:2px 0 10px}.now-copy p:last-child{margin:0;line-height:1.9}.first-care{margin:0 20px;padding:17px 18px;background:#e5eadb;border-left:4px solid var(--main);border-radius:5px 12px 12px 5px}.first-care span,.first-care small{display:block}.first-care span{font-size:12px;color:var(--main);font-weight:700;letter-spacing:.1em}.first-care strong{display:block;font-family:var(--mincho);font-size:18px;line-height:1.7;margin:5px 0;color:#394936}.first-care small{font-size:13px;color:var(--muted);line-height:1.8}.state-map{padding:20px 24px 23px;display:grid;gap:11px}.state-row{display:grid;grid-template-columns:92px 1fr 84px;gap:9px;align-items:center;opacity:.7}.state-row.is-main{opacity:1}.state-row>div{line-height:1.3}.state-row b,.state-row small{display:block}.state-row b{font-size:13px}.state-row small{font-size:10px;color:var(--muted)}.state-track{height:8px;background:#e8ebdf;border-radius:99px;overflow:hidden}.state-track i{display:block;height:100%;border-radius:99px}.state-row em{font-style:normal;font-size:11px;color:var(--muted);text-align:right}.state-row.is-main em{color:var(--main);font-weight:700}.diagnosis-details{margin:0 0 22px}.diagnosis-details>summary{list-style:none;cursor:pointer;border:1px solid #cbd5bd;background:#f7f8f1;border-radius:12px;padding:15px 18px;display:flex;justify-content:space-between;align-items:center;color:var(--main);font-weight:700}.diagnosis-details>summary::-webkit-details-marker{display:none}.diagnosis-details>summary:after{content:'＋';font-size:20px;margin-left:10px}.diagnosis-details[open]>summary:after{content:'−'}.diagnosis-details>summary small{display:block;margin-left:auto;font-size:11px;font-weight:400;color:var(--muted)}.diagnosis-inner{padding-top:18px}.balance-picture{position:relative;width:190px;height:120px;margin:20px auto 8px;background:linear-gradient(145deg,#e7f0f1 0 33%,#f2e9dc 33% 66%,#f2e6e8 66%);clip-path:polygon(50% 0,100% 100%,0 100%);opacity:.9}.balance-axis{position:absolute;font-size:11px;font-weight:700}.axis-r{top:13px;left:79px}.axis-f{bottom:7px;left:9px}.axis-l{bottom:7px;right:7px}.balance-dot{position:absolute;width:17px;height:17px;background:#fff;border:4px solid var(--main);border-radius:50%;z-index:2;box-shadow:0 2px 5px #46523933}.balance-dot.recharge{top:29px;left:86px}.balance-dot.flow{bottom:27px;left:43px}.balance-dot.relax{bottom:27px;right:43px}.balance-dot.balanced{top:57px;left:86px}.balance-picture small{position:absolute;left:0;right:0;top:78px;text-align:center;font-size:10px;color:#3f4a3a}
+@media(max-width:680px){.app-header{padding:17px 20px 15px;margin:0 18px;gap:10px}.brand-name{font-size:16px}.header-label{font-size:11px;padding:3px 7px}.brand-mark{width:34px;height:39px;font-size:18px}main{padding:24px 22px 16px;max-width:490px}.welcome-heading{margin-bottom:18px}h1{font-size:29px;line-height:1.55;letter-spacing:.08em}.kicker{font-size:12px;margin-bottom:7px}.sub{font-size:13px}.welcome-grid{display:flex;flex-direction:column;gap:24px}.day-card{width:100%;padding:12px 14px 10px}.wellness-art{width:calc(100% + 28px);height:185px;object-fit:cover;object-position:50% 43%;margin:-7px -14px 0}.date b{font-size:26px}.day-top{font-size:12px}.day-foot{font-size:13px;padding-top:8px}.start-panel{width:100%}.start-panel>.eyebrow,.start-panel>h2,.start-panel>.intro{display:none}.time-label{text-align:center;margin:0 0 7px}.btn{margin-top:0}.start-note{margin-bottom:18px}.flow-list li{padding:7px 3px}.top-note{margin-top:22px;font-size:12px}.q{padding:17px 12px}.q-text{font-size:15px;gap:7px}.scale{gap:5px}.scale button{font-size:13px}.nav .btn{font-size:15px}.app-footer{margin:0 22px;font-size:11px}h2{font-size:24px}.type-head{padding-left:17px;padding-right:17px}.type-head h2{font-size:24px}.care-illustration{height:175px}.now-copy{padding:18px 18px 14px}.now-copy h2{font-size:23px}.first-care{margin:0 14px;padding:14px}.state-map{padding:17px 16px 20px}.state-row{grid-template-columns:79px 1fr 70px;gap:6px}.state-row em{font-size:10px}.diagnosis-details>summary{padding:13px 14px}.diagnosis-details>summary small{display:none}}
+@media(prefers-reduced-motion:reduce){.screen{animation:none}.btn,.progress i{transition:none}}
+.scale button{scroll-margin-block:130px}.date small{max-width:none;white-space:nowrap}
+.care-illustration img{object-position:center top}
+.care-illustration{height:250px}.care-illustration img{object-position:center 42%}
+@media(max-width:680px){.care-illustration{height:220px}}
+.link-btn.primary{background:#6f8869;color:#fff;border-color:#6f8869;padding:17px 18px}.link-btn.primary small{color:#f1f5ec}.link-btn.primary.off{background:#879982;color:#fff;opacity:1}.link-btn.primary .soon{color:#f2ead6}
+.care-illustration{height:auto!important;overflow:visible;padding:18px;background:#f8f6ec;text-align:center}.care-illustration img{display:block!important;width:100%!important;max-width:560px!important;height:auto!important;object-fit:contain!important;object-position:center!important;transform:none!important;margin:0 auto}
+.balance-picture{clip-path:none!important;background:none!important;overflow:visible}.balance-picture:before{content:'';position:absolute;inset:0;background:linear-gradient(145deg,#e7f0f1 0 33%,#f2e9dc 33% 66%,#f2e6e8 66%);clip-path:polygon(50% 0,100% 100%,0 100%)}.balance-axis,.balance-dot,.balance-picture small{z-index:1}
