@@ -6,7 +6,7 @@
 // ---------- リンク先（空欄のボタンは「準備中」と表示） ----------
 const LINKS = {
   telmee:    { label: '🌿 テルミーについて知る', url: 'https://www.canva.com/design/DAHGP-GtOPs/KsXIl6oJmzJTWlI7v1FAqA/view' },
-  line:      { label: '💌 公式LINEから無料で相談する', url: 'https://lin.ee/XWCoZGy' }
+  line:      { label: '公式LINEで「相談」と送る', url: 'https://lin.ee/XWCoZGy' }
 };
 
 // ---------- 回答のしかた ----------
@@ -201,23 +201,35 @@ function renderResult() {
   const stateCopy = {
     recharge: {
       title: 'エネルギーを補いたい状態',
-      summary: '今は前に進むことより、温めて休み、使った力を戻すことを優先してよさそうです。',
-      reason: '身体を温めて、がんばり続けている身体に休む合図を送ります。'
+      summary: '今は前に進むことより、温めて休み、使った力を戻すことを優先しましょう。',
+      summaryHtml: '今は前に進むことより、温めて休み、<br>使った力を戻すことを優先しましょう。',
+      reason: '身体を温めて、がんばり続けている身体に休む合図を送ります。',
+      futureTitle: '疲れが抜けにくく、<br>動きたいときに動けないことも',
+      futureText: '補う力が足りないまま頑張り続けると、身体は限られたエネルギーを粘膜や内臓などの大切な働きに優先して使います。そのぶん余力が減り、朝から重い、気力が続かないなど、さまざまな不調を感じやすくなることがあります。'
     },
     flow: {
       title: 'めぐりを整えたい状態',
       summary: '身体にたまった重さやこわばりを、心地よい動きで少しずつ流していきたい時です。',
-      reason: '少し身体を動かすと、冷えやこわばりをゆるめるきっかけになります。'
+      summaryHtml: '身体にたまった重さやこわばりを、<br>心地よい動きで少しずつ流していきたい時です。',
+      reason: '少し身体を動かすと、冷えやこわばりをゆるめるきっかけになります。',
+      futureTitle: '重さやこわばりが、いつもの状態になることも',
+      futureText: 'めぐりにくい状態が続くと、冷えやむくみ、肩まわりのつらさが残り、動くことがおっくうになることがあります。'
     },
     relax: {
       title: 'こころと身体をゆるめたい状態',
       summary: '考えることや、やることが続いているようです。まずは緊張をほどく時間をつくりましょう。',
-      reason: '呼吸を整えると、頭と身体を休む時間へ切り替えやすくなります。'
+      summaryHtml: '考えることや、やることが続いているようです。<br>まずは緊張をほどく時間をつくりましょう。',
+      reason: '呼吸を整えると、頭と身体を休む時間へ切り替えやすくなります。',
+      futureTitle: '休んでも、こころと身体が休まりにくくなることも',
+      futureText: '緊張が続くと、眠りが浅い、考えごとが止まらない、ちょっとしたことで疲れる状態につながることがあります。'
     },
     balanced: {
       title: '今の調子を保てている状態',
       summary: '大きく気になる傾向は少なめです。今の心地よい習慣を、無理なく続けていきましょう。',
-      reason: '今の自分が心地よいと感じることを続けるのが、いちばんのセルフケアです。'
+      summaryHtml: '大きく気になる傾向は少なめです。<br>今の心地よい習慣を、無理なく続けていきましょう。',
+      reason: '今の自分が心地よいと感じることを続けるのが、いちばんのセルフケアです。',
+      futureTitle: '小さな変化に早めに気づけば、今の調子を保ちやすくなります',
+      futureText: '忙しい日が続くとバランスは変わります。今の心地よい習慣と、自分に出やすいサインを知っておきましょう。'
     }
   };
   const stateWishes = {
@@ -230,7 +242,10 @@ function renderResult() {
     : 'balanced';
   const now = stateCopy[mainKey];
   $('r-now-title').textContent = now.title;
-  $('r-now-summary').textContent = now.summary;
+  $('r-now-summary').innerHTML = now.summaryHtml || now.summary;
+  $('r-future-title').innerHTML = now.futureTitle;
+  $('r-future-text').textContent = now.futureText;
+  $('r-future').dataset.type = mainKey;
   $('r-care-illustration').dataset.type = mainKey;
   $('r-care-illustration').querySelector('img').src = `care-${mainKey === 'balanced' ? 'recharge' : mainKey}.png`;
 
@@ -298,8 +313,29 @@ function renderResult() {
     relax: '3秒吸って、6秒はく呼吸を3回くり返す',
     balanced: '今の自分が心地よいことを、ひとつ続ける'
   };
-  $('r-first-care').textContent = firstActions[mainKey];
+  const firstActionHtml = {
+    recharge: '温かい汁ものを、<br>ひと口からゆっくり味わう',
+    flow: '肩と首をゆっくり回して、<br>10分だけ歩いてみる',
+    relax: '3秒吸って、6秒はく呼吸を<br>3回くり返す',
+    balanced: '今の自分が心地よいことを、<br>ひとつ続ける'
+  };
+  $('r-first-care').innerHTML = firstActionHtml[mainKey];
   $('r-first-reason').textContent = now.reason;
+  const stepGuidance = [
+    {
+      caution: 'STEP 0では、食べたものを十分に受け取る土台が弱っている可能性があります。まずは消化の負担を減らし、休息や温めるケアから丁寧に始めることが大切です。'
+    },
+    {
+      caution: '今は、身体が使った力を少しずつ補う段階です。食事だけに頼らず、休息や生活の整え方も一緒に見直しましょう。'
+    },
+    {
+      caution: '補ったものを全身にめぐらせる段階です。無理のない動きや入浴、呼吸を自分のペースで続けましょう。'
+    },
+    {
+      caution: '忙しい時に出やすいサインを知り、今の心地よい習慣を続けることが予防につながります。'
+    }
+  ];
+  $('r-step-caution').textContent = stepGuidance[step].caution;
   $('r-step').innerHTML = `<span>今の整え方の入口は</span><b>STEP ${step}</b><strong>${steps[step].title}</strong><p>${steps[step].text}</p><small>STEPは良い・悪いではなく、今どこから整えるとよいかを表しています。</small><div class="step-overview">${steps.map((s, i) => `<div class="step-row ${i === step ? 'is-current' : ''}"><em>STEP ${i}</em><span>${s.title}</span>${i === step ? '<i>今ここ</i>' : ''}</div>`).join('')}</div>`;
   const stateNames = { recharge: ['補う力', '温かく休む'], flow: ['めぐる力', '軽く動かす'], relax: ['ゆるむ力', '深く休む'] };
   $('r-state-map').innerHTML = Object.keys(score).map(t => {
@@ -315,7 +351,7 @@ function renderResult() {
   // ⑥ もうひとつのセルフケア
   const main = mains.length ? TYPES[mains[0]] : null;
   $('r-links').innerHTML =
-    linkButton('line', `公式LINEで「STEP ${step}・今悩んでいること・どうなりたいか」を教えてね。書けるところだけで大丈夫です。あなたの結果は「${now.title}」。初回相談は無料です。`, 'primary') +
+    linkButton('line', 'タップすると公式LINEが開きます', 'primary') +
     linkButton('telmee', main ? main.telmee : '温かさに包まれながら、ほっとひと息つく時間を。');
 
   // 今日のひとつ

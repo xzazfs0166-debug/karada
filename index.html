@@ -6,7 +6,7 @@
 <title>わたしのからだセルフチェック</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="styles.css?v=20260929e">
 <meta name="theme-color" content="#edf0e5">
 </head>
 <body>
@@ -81,8 +81,13 @@
       <div class="state-map" id="r-state-map" aria-label="今のからだのバランス"></div>
     </section>
 
+    <section class="future-card" id="r-future" aria-labelledby="r-future-title">
+      <div class="future-visual" aria-hidden="true"><span class="future-person">○</span><span class="future-arrow">→</span><span class="future-person future-person-after">○</span></div>
+      <div class="future-copy"><p class="eyebrow">この状態が続くと</p><h3 id="r-future-title"></h3><p id="r-future-text"></p><p class="future-caution" id="r-step-caution"></p><small>放置する期間が長いほど、整うまでにも時間が必要になることがあります。</small></div>
+    </section>
+
     <details class="diagnosis-details">
-      <summary><span>詳しい診断を見る</span><small>タイプ・睡眠・食材について</small></summary>
+      <summary><span><b>今の状態を改善したい方へ</b>詳しい診断結果を見る</span><small>タイプ・睡眠・食材までわかります</small></summary>
       <div class="diagnosis-inner">
     <section class="type-head" id="r-type">
       <div class="balance-picture" id="r-balance-picture" aria-hidden="true"></div>
@@ -103,10 +108,11 @@
     </details>
 
     <section class="card soft">
-      <p class="eyebrow">診断結果を、これからの行動へ</p>
-      <h3>診断結果をもとに、<br>整え方を無料で相談できます</h3>
-      <p>公式LINEから、まこに相談できます。結果を見ながら、今のあなたに合う実践を一緒に考えましょう。</p>
-      <div class="consult-box"><strong>初回無料相談で一緒に整理すること</strong><ul><li>今のSTEPと身体のサイン</li><li>今いちばん困っていること</li><li>これからどうなりたいか</li><li>今の自分に合う「最初のひとつ」</li></ul><small>最初は「診断したよ」のひと言だけでも大丈夫。無理な勧誘はありません。</small></div>
+      <p class="eyebrow">ひとりで頑張らなくて大丈夫</p>
+      <h3>まずはテルミーで、<br>身体を温めてゆるめませんか？</h3>
+      <p>診断結果をもとに、今のあなたに合う受け方をご案内します。公式LINEに「相談」と送ってください。</p>
+      <p class="consult-note"><strong>初回相談は無料です</strong><br>あとは、まこがやりとりの中でお聞きします。</p>
+      <p class="cta-guide">▼ 下の緑のボタンをタップ</p>
       <div id="r-links"></div>
       <div class="consult-flow"><span>診断</span><i>→</i><span>相談</span><i>→</i><span>実践</span><i>→</i><span>再診断</span></div>
     </section>
@@ -117,6 +123,6 @@
 </main>
 <footer class="app-footer">わたしのからだ <span>—</span> 日々の、ちいさな養生。</footer>
 
-<script src="app.js"></script>
+<script src="app.js?v=20260929e"></script>
 </body>
 </html>
