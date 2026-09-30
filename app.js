@@ -195,7 +195,7 @@ function renderResult() {
     { title: 'まずは、消化力を整えるところから', text: '温かく消化しやすい食事と休息で、身体が栄養を受け取るための土台をつくる段階です。' },
     { title: '必要な栄養を、少しずつ受け取る', text: '食事の量や種類を無理なく整えて、使ったエネルギーを補っていく段階です。' },
     { title: '栄養とエネルギーを、身体にめぐらせる', text: '軽い運動や入浴、深い呼吸を取り入れて、身体のめぐりを育てる段階です。' },
-    { title: '今の調子を、心地よく育てて保つ', text: '今できている習慣を大切にしながら、自分に合う整え方を続けていく段階です。' }
+    { title: '今の調子を、<br>心地よく育てて保つ', text: '今できている習慣を大切にしながら、自分に合う整え方を続けていく段階です。' }
   ];
 
   const stateCopy = {
@@ -225,9 +225,10 @@ function renderResult() {
     },
     balanced: {
       title: '今の調子を保てている状態',
+      titleHtml: '今の調子を、<br>保てている状態',
       summary: '大きく気になる傾向は少なめです。今の心地よい習慣を、無理なく続けていきましょう。',
-      summaryHtml: '大きく気になる傾向は少なめです。<br>今の心地よい習慣を、無理なく続けていきましょう。',
-      reason: '今の自分が心地よいと感じることを続けるのが、いちばんのセルフケアです。',
+      summaryHtml: '大きく気になる傾向は少なめです。<br>今の心地よい習慣を、<br>無理なく続けていきましょう。',
+      reason: '今の自分が心地よいと感じることを\n続けるのが、いちばんのセルフケアです。',
       futureTitle: '小さな変化に早めに気づけば、今の調子を保ちやすくなります',
       futureText: '忙しい日が続くとバランスは変わります。今の心地よい習慣と、自分に出やすいサインを知っておきましょう。'
     }
@@ -241,7 +242,7 @@ function renderResult() {
     ? mains.slice().sort((a, b) => stateWishes[b].filter(w => wishes.has(w)).length - stateWishes[a].filter(w => wishes.has(w)).length)[0]
     : 'balanced';
   const now = stateCopy[mainKey];
-  $('r-now-title').textContent = now.title;
+  $('r-now-title').innerHTML = now.titleHtml || now.title;
   $('r-now-summary').innerHTML = now.summaryHtml || now.summary;
   $('r-future-title').innerHTML = now.futureTitle;
   $('r-future-text').textContent = now.futureText;
@@ -320,7 +321,7 @@ function renderResult() {
     balanced: '今の自分が心地よいことを、<br>ひとつ続ける'
   };
   $('r-first-care').innerHTML = firstActionHtml[mainKey];
-  $('r-first-reason').textContent = now.reason;
+  $('r-first-reason').innerHTML = now.reason.replace('\n', '<br>');
   const stepGuidance = [
     {
       caution: 'STEP 0では、食べたものを十分に受け取る土台が弱っている可能性があります。まずは消化の負担を減らし、休息や温めるケアから丁寧に始めることが大切です。'
