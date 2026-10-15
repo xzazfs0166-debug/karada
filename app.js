@@ -10,11 +10,7 @@ const LINKS = {
 };
 
 // ---------- 回答のしかた ----------
-const SCALE = [
-  { label: 'ほとんどない', point: 0 },
-  { label: 'ときどきある', point: 1 },
-  { label: 'よくある', point: 2 }
-];
+// 当てはまる項目をチェック（未選択は0、選択は2）。
 
 // ---------- 体質チェック 15問 ----------
 const BODY_QS = [
@@ -35,10 +31,8 @@ const BODY_QS = [
   { text: '自分のための時間が少ない', type: 'relax' }
 ];
 
-// ---------- 睡眠チェック 8問（tendency = 「よくある」のときの結果表示） ----------
+// ---------- 睡眠チェック 6問（体の疲れと重複する2問を除外） ----------
 const SLEEP_QS = [
-  { text: '朝すっきり起きられない', tendency: '朝すっきり起きにくい' },
-  { text: '寝ても疲れが取れない', tendency: '眠っても疲れが残りやすい' },
   { text: '日中眠くなる', tendency: '日中に眠気が出やすい' },
   { text: '寝つくまでに時間がかかる', tendency: '寝つくまでに時間がかかりやすい' },
   { text: '夜中に目が覚める', tendency: '夜中に目が覚めることが多い' },
@@ -120,7 +114,7 @@ const BALANCED = {
 // ============================================================
 // ここから下は画面の動き
 // ============================================================
-const answers = { body: Array(BODY_QS.length).fill(null), sleep: Array(SLEEP_QS.length).fill(null) };
+const answers = { body: Array(BODY_QS.length).fill(0), sleep: Array(SLEEP_QS.length).fill(0) };
 const wishes = new Set();
 const $ = id => document.getElementById(id);
 
@@ -136,30 +130,15 @@ function renderScale(listId, qs, key) {
   list.innerHTML = '';
   qs.forEach((q, i) => {
     const li = document.createElement('li');
-    li.className = 'q';
-    li.innerHTML = `<p class="q-text"><span class="q-no">${i + 1}</span></p><div class="scale" role="radiogroup"></div>`;
-    li.querySelector('.q-text').append(q.text);
-    const box = li.querySelector('.scale');
-    SCALE.forEach(s => {
-      const b = document.createElement('button');
-      b.type = 'button';
-      b.textContent = s.label;
-      b.setAttribute('role', 'radio');
-      const sync = () => box.querySelectorAll('button').forEach((x, j) => x.setAttribute('aria-checked', answers[key][i] === SCALE[j].point));
-      b.addEventListener('click', () => { answers[key][i] = s.point; sync(); updateNext(key); });
-      box.appendChild(b);
-      sync();
-    });
+    li.innerHTML = '<label class="check"><input type="checkbox"><span class="box" aria-hidden="true"></span><span></span></label>';
+    li.querySelector('span:last-child').textContent = q.text;
+    const cb = li.querySelector('input');
+    cb.checked = answers[key][i] === 2;
+    cb.addEventListener('change', () => { answers[key][i] = cb.checked ? 2 : 0; });
     list.appendChild(li);
   });
-  updateNext(key);
-}
-
-function updateNext(key) {
-  const left = answers[key].filter(a => a === null).length;
-  const btn = $('next-' + key);
-  btn.disabled = left > 0;
-  btn.textContent = left > 0 ? `あと${left}問` : 'つぎへ';
+  $('next-' + key).disabled = false;
+  $('next-' + key).textContent = 'つぎへ';
 }
 
 function renderWishes() {
@@ -183,14 +162,21 @@ function linkButton(k, sub, className = '') {
   return `${tag}<b>${l.label}</b>${sub ? `<small>${sub}</small>` : ''}${l.url ? '' : '<small class="soon">（準備中）</small>'}</a>`;
 }
 
+// 体と睡眠のチェック数を合計してSTEPを判定する。
+function determineStep(bodyCount, sleepCount) {
+  const total = bodyCount + sleepCount;
+  return total >= 8 ? 0 : total >= 6 ? 1 : total >= 3 ? 2 : 3;
+}
+
 function renderResult() {
   const score = { recharge: 0, flow: 0, relax: 0 };
   BODY_QS.forEach((q, i) => score[q.type] += answers.body[i]);
   const max = Math.max(...Object.values(score));
   const mains = max === 0 ? [] : Object.keys(score).filter(t => score[t] === max);
   const sleepTotal = answers.sleep.reduce((a, b) => a + b, 0);
-  const totalScore = Object.values(score).reduce((a, b) => a + b, 0) + sleepTotal;
-  const step = totalScore >= 30 ? 0 : totalScore >= 20 ? 1 : totalScore >= 10 ? 2 : 3;
+  const bodyCount = answers.body.filter(a => a === 2).length;
+  const sleepCount = answers.sleep.filter(a => a === 2).length;
+  const step = determineStep(bodyCount, sleepCount);
   const steps = [
     { title: 'まずは、消化力を整えるところから', text: '温かく消化しやすい食事と休息で、身体が栄養を受け取るための土台をつくる段階です。' },
     { title: '必要な栄養を、少しずつ受け取る', text: '食事の量や種類を無理なく整えて、使ったエネルギーを補っていく段階です。' },
@@ -244,8 +230,32 @@ function renderResult() {
   const now = stateCopy[mainKey];
   $('r-now-title').innerHTML = now.titleHtml || now.title;
   $('r-now-summary').innerHTML = now.summaryHtml || now.summary;
-  $('r-future-title').innerHTML = now.futureTitle;
-  $('r-future-text').textContent = now.futureText;
+  // STEPは整え方の段階。タイプとは独立して、この欄の案内を切り替える。
+  const futureByStep = [
+    { heading: 'この状態が続くと', title: now.futureTitle, text: now.futureText,
+      note: '放置する期間が長いほど、整うまでにも時間が必要になることがあります。' },
+    { heading: '補うことを後回しにすると', title: '休息や食事を後回しにして、疲れを繰り返していませんか？',
+      text: '忙しさを優先して、食事や休む時間が後回しになると、疲れが抜けにくい日が続くこともあります。今はがんばる量を増やすより、温かい食事や休息で、使った力を少しずつ補う習慣を大切にしましょう。',
+      note: '今日できる小さな補給と休息を、ひとつ選んでみましょう。' },
+    { heading: 'ここから、整える習慣を', title: '補う習慣に、心地よい動きと温まる時間を',
+      text: '食事と休息を大切にしながら、軽い散歩やストレッチ、心地よい温度の入浴を取り入れてみましょう。無理に活動を増やさず、その日の調子に合わせて続けることが大切です。',
+      note: '疲れを感じる日は休息を優先し、自分のペースで続けましょう。' },
+    { heading: '今の心地よさを保つために', title: '今の習慣を大切に、小さな変化に気づく',
+      text: '今できている食事や休息、自分に合うセルフケアを無理なく続けていきましょう。忙しい時期こそ、眠りや疲れ方などの小さな変化を振り返り、早めに休む時間をつくってみてください。',
+      note: '調子のよい日も、自分をいたわる時間を大切に。' }
+  ];
+  const future = futureByStep[step];
+  $('r-future-heading').textContent = future.heading;
+  $('r-future-title').innerHTML = future.title;
+  $('r-future-text').textContent = future.text;
+  $('r-future-note').textContent = future.note;
+  // STEPごとの場面を表示。STEP 0の比較ラベルだけは従来のまま残す。
+  const futureVisual = $('r-future').querySelector('.future-visual');
+  futureVisual.hidden = false;
+  futureVisual.querySelector('img').src = step === 0 ? 'future-energy.png' : step === 1 ? 'step-1-caution.png' : `step-${step}-care.png`;
+  futureVisual.querySelector('img').alt = ['', '休息や食事を後回しにし、疲れが積み重なる様子', '無理のないストレッチで身体を動かす女性', 'お茶と読書で心地よく過ごす女性'][step];
+  futureVisual.querySelector('.future-labels').hidden = step > 1;
+  $('r-future').dataset.step = step;
   $('r-future').dataset.type = mainKey;
   $('r-care-illustration').dataset.type = mainKey;
   $('r-care-illustration').querySelector('img').src = `care-${mainKey === 'balanced' ? 'recharge' : mainKey}.png`;
@@ -272,12 +282,11 @@ function renderResult() {
 
   // 睡眠の傾向
   const often = SLEEP_QS.filter((q, i) => answers.sleep[i] === 2).map(q => q.tendency);
-  const some = SLEEP_QS.filter((q, i) => answers.sleep[i] === 1).map(q => q.tendency);
-  const sleepList = often.length ? often : some.slice(0, 2);
+  const sleepList = often;
   $('r-sleep').innerHTML = sleepTotal === 0
     ? '眠りについては、気になるサインは少なめでした。'
     : sleepList.map(s => `<span class="chip">${s}</span>`).join('') + '<br>' +
-      (sleepTotal >= 8 ? '眠りのことが、今いちばんの手当てどころかもしれません。' : '眠りについて、少し気になるサインが出ているようです。');
+      (sleepTotal >= SLEEP_QS.length ? '眠りのことが、今いちばんの手当てどころかもしれません。' : '眠りについて、少し気になるサインが出ているようです。');
 
   // ②〜⑤ タイプ別
   const box = $('r-types');
@@ -302,7 +311,7 @@ function renderResult() {
   if (!mains.length) Object.values(TYPES).forEach(t => careAll.push(t.care[0], t.care[1]));
 
   // 睡眠が気になる人には睡眠ケアを1つ足す
-  if (sleepTotal >= 4 && !careAll.some(c => c.cat === '睡眠')) careAll.push(TYPES.relax.care[0]);
+  if (sleepTotal >= SLEEP_QS.length / 2 && !careAll.some(c => c.cat === '睡眠')) careAll.push(TYPES.relax.care[0]);
 
   // 求めていることと重なるものを上に
   const hit = c => c.wish.filter(w => wishes.has(w)).length;
@@ -337,7 +346,7 @@ function renderResult() {
     }
   ];
   $('r-step-caution').textContent = stepGuidance[step].caution;
-  $('r-step').innerHTML = `<span>今の整え方の入口は</span><b>STEP ${step}</b><strong>${steps[step].title}</strong><p>${steps[step].text}</p><small>STEPは良い・悪いではなく、今どこから整えるとよいかを表しています。</small><div class="step-overview">${steps.map((s, i) => `<div class="step-row ${i === step ? 'is-current' : ''}"><em>STEP ${i}</em><span>${s.title}</span>${i === step ? '<i>今ここ</i>' : ''}</div>`).join('')}</div>`;
+  $('r-step').innerHTML = `<span>今の整え方の入口は</span><b>STEP ${step}</b><strong>${steps[step].title}</strong><p>${steps[step].text}</p><small>からだ ${bodyCount}個 ＋ 睡眠 ${sleepCount}個 ＝ 合計${bodyCount + sleepCount}個。合計8個以上はSTEP 0、6〜7個はSTEP 1、3〜5個はSTEP 2、0〜2個はSTEP 3です。</small><div class="step-overview">${steps.map((s, i) => `<div class="step-row ${i === step ? 'is-current' : ''}"><em>STEP ${i}</em><span>${s.title}</span>${i === step ? '<i>今ここ</i>' : ''}</div>`).join('')}</div>`;
   const stateNames = { recharge: ['補う力', '温かく休む'], flow: ['めぐる力', '軽く動かす'], relax: ['ゆるむ力', '深く休む'] };
   $('r-state-map').innerHTML = Object.keys(score).map(t => {
     const level = score[t] <= 2 ? 'おだやか' : score[t] <= 5 ? '少し気になる' : '今いちばん大切';
@@ -379,7 +388,7 @@ $('back-sleep').addEventListener('click', () => show('screen-body'));
 $('next-wish').addEventListener('click', renderResult);
 $('back-wish').addEventListener('click', () => show('screen-sleep'));
 $('btn-retry').addEventListener('click', () => {
-  answers.body.fill(null); answers.sleep.fill(null); wishes.clear();
+  answers.body.fill(0); answers.sleep.fill(0); wishes.clear();
   show('screen-top');
 });
 

@@ -176,3 +176,13 @@ h1{font-size:34px;line-height:1.6;letter-spacing:.12em;margin:0 0 10px}h2{line-h
 .consult-note{margin:15px 0;padding:13px 14px;border-radius:10px;background:#fffef8;line-height:1.8}.consult-note strong{color:var(--main);font-family:var(--mincho);font-size:17px}.cta-guide{margin:18px 0 5px;text-align:center;color:var(--main);font-size:13px;font-weight:700}.link-btn.primary{position:relative;padding:18px 46px 18px 18px!important;border:3px solid #fff!important;outline:3px solid #6f8869;border-radius:14px!important;text-align:center;box-shadow:0 5px 0 #52694e!important}.link-btn.primary b{font-size:17px}.link-btn.primary b:after{content:' →';font-size:20px}.link-btn.primary small{margin-top:5px}.card.soft>#r-links{margin:7px 3px 0}
 .future-visual{gap:7px}.future-state{display:flex;flex-direction:column;align-items:center;justify-content:center;width:46px;min-height:76px;padding:7px 3px;border-radius:13px;background:#fff;border:1px solid #e1c8b7;box-sizing:border-box}.future-state i{display:grid;place-items:center;width:34px;height:38px;font-style:normal;font-size:27px;line-height:1}.future-state small{display:block;margin-top:5px;color:#7c5e50;font-size:9px;font-weight:700;white-space:nowrap}.future-state-after{background:#f1dfd5;border-color:#d6ad98}.future-arrow{flex:0 0 auto;color:#a77661;font-size:19px;font-weight:700}@media(max-width:680px){.future-state{width:39px;min-height:69px}.future-state i{width:31px;height:34px;font-size:24px}.future-state small{font-size:8px}.future-visual{gap:4px}}
 .future-card{grid-template-columns:190px 1fr}.future-visual{display:block}.future-art{display:block;width:100%;height:auto;object-fit:contain}.future-labels{display:flex;justify-content:space-around;gap:28px;margin-top:3px}.future-labels span{font-size:10px;font-weight:700;color:#785d50;white-space:nowrap}@media(max-width:680px){.future-card{display:block}.future-visual{max-width:260px;margin:0 auto 15px}.future-labels span{font-size:11px}}
+
+/* STEPごとのセルフケアイラスト */
+.future-labels[hidden]{display:none}
+.future-card:not([data-step="0"]){background:#f6f8ef;border-color:#d5ddc9;box-shadow:0 3px 0 #e4eadb}
+.future-card:not([data-step="0"]) .eyebrow{color:#647857}
+.future-card:not([data-step="0"]) h3{color:#43533c}
+
+.future-card[data-step="1"]{background:#fff8f2;border-color:#e1c8b7;box-shadow:0 3px 0 #eee0d5}
+.future-card[data-step="1"] .eyebrow{color:#9a624f}
+.future-card[data-step="1"] h3{color:#694c40}

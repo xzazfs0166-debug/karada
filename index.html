@@ -6,7 +6,7 @@
 <title>わたしのからだセルフチェック</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=20260930i">
+<link rel="stylesheet" href="styles.css?v=20261015caution">
 <meta name="theme-color" content="#edf0e5">
 </head>
 <body>
@@ -26,10 +26,10 @@
     </div>
     <div class="start-panel"><p class="eyebrow">わたしのからだ セルフチェック</p><h2>最近のわたしは、<br>どんな調子？</h2>
     <p class="intro">疲れや冷え、眠り、ストレス。<br>ここ1か月の自分を、ふり返ってみましょう。</p>
-    <div class="time-label">約3分 <span>／</span> 全23問 ＋ 大切にしたいこと</div>
+    <div class="time-label">約3分 <span>／</span> 全21項目 ＋ 大切にしたいこと</div>
     <button class="btn" id="btn-start">チェックをはじめる <span aria-hidden="true">→</span></button>
     <p class="start-note">いい・わるいをつけるチェックではありません。</p>
-    <ol class="flow-list"><li><span>01</span><div>からだのこと<small>15の質問</small></div></li><li><span>02</span><div>眠りのこと<small>8つの質問</small></div></li><li><span>03</span><div>大切にしたいこと<small>今の気持ちを選ぶ</small></div></li></ol>
+    <ol class="flow-list"><li><span>01</span><div>からだのこと<small>15のチェック項目</small></div></li><li><span>02</span><div>眠りのこと<small>6つのチェック項目</small></div></li><li><span>03</span><div>大切にしたいこと<small>今の気持ちを選ぶ</small></div></li></ol>
     </div></div>
     <p class="note top-note">※このチェックは医学的な診断ではなく、生活習慣や自覚症状をふり返るためのセルフチェックです。つらい症状が強いときや長く続くときは、医療機関に相談してください。</p>
   </section>
@@ -38,7 +38,7 @@
   <section class="screen" id="screen-body" hidden>
     <p class="step-count">1 / 3</p>
     <h2>からだのチェック</h2>
-    <p class="muted">最近の自分にいちばん近いものを選んでね。</p>
+    <p class="muted">最近の自分に当てはまる項目にチェックしてね。何も当てはまらなければ、そのまま次へ進めます。</p>
     <ol class="q-list" id="body-list"></ol>
     <div class="nav">
       <button class="btn ghost" id="back-body">もどる</button>
@@ -50,7 +50,7 @@
   <section class="screen" id="screen-sleep" hidden>
     <p class="step-count">2 / 3</p>
     <h2>睡眠のチェック</h2>
-    <p class="muted">眠りについて、近いものを選んでね。</p>
+    <p class="muted">眠りについて、当てはまる項目にチェックしてね。何も当てはまらなければ、そのまま次へ進めます。</p>
     <ol class="q-list" id="sleep-list"></ol>
     <div class="nav">
       <button class="btn ghost" id="back-sleep">もどる</button>
@@ -83,7 +83,7 @@
 
     <section class="future-card" id="r-future" aria-labelledby="r-future-title">
       <div class="future-visual" aria-hidden="true"><img class="future-art" src="future-energy.png" alt=""><div class="future-labels"><span>今の状態</span><span>続けると</span></div></div>
-      <div class="future-copy"><p class="eyebrow">この状態が続くと</p><h3 id="r-future-title"></h3><p id="r-future-text"></p><p class="future-caution" id="r-step-caution"></p><small>放置する期間が長いほど、整うまでにも時間が必要になることがあります。</small></div>
+      <div class="future-copy"><p class="eyebrow" id="r-future-heading">この状態が続くと</p><h3 id="r-future-title"></h3><p id="r-future-text"></p><p class="future-caution" id="r-step-caution"></p><small id="r-future-note">放置する期間が長いほど、整うまでにも時間が必要になることがあります。</small></div>
     </section>
 
     <details class="diagnosis-details">
@@ -123,6 +123,6 @@
 </main>
 <footer class="app-footer">わたしのからだ <span>—</span> 日々の、ちいさな養生。</footer>
 
-<script src="app.js?v=20260930i"></script>
+<script src="app.js?v=20261015caution"></script>
 </body>
 </html>
